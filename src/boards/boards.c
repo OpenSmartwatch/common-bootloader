@@ -163,7 +163,9 @@ static uint32_t _long_press_count = 0;
 void SysTick_Handler(void)
 {
   _systick_count++;
-  pnvram_add_ms(pnvram, 1);
+#ifdef NRF52832_XXAA
+    pnvram_add_ms(pnvram, 1);
+#endif
 #if LEDS_NUMBER > 0
   led_tick();
 #endif
@@ -606,13 +608,13 @@ struct st7789_cmd {
   uint8_t len;
 };
 
-const static struct st7789_cmd st7789_init_data[] = {
+static const struct st7789_cmd st7789_init_data[] = {
   { COLMOD,   (uint8_t *) "\x05", 1 }, // MCU will send 16-bit RGB565
   { MADCTL,   (uint8_t *) "\x00", 1 }, // Left to right, top to bottom
   //{ INVOFF,   NULL }, // Results in odd palette
-  { INVON,    NULL },
-  { NORON,    NULL },
-  { NOP,      NULL },
+  { INVON,    NULL, 0},
+  { NORON,    NULL, 0},
+  { NOP,      NULL, 0},
 };
 
 
@@ -879,7 +881,7 @@ void st7789_state(int state)
   const uint16_t bg = 0;
   uint16_t color = bg;
 
-  for (int i=0; i<sizeof(rle); i++) {
+  for (unsigned int i=0; i<sizeof(rle); i++) {
     uint8_t rl = rle[i];
     while (rl) {
       linebuffer[bp] = color >> 8;

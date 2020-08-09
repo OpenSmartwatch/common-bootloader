@@ -16,10 +16,10 @@ build_format = '| {:32} | {:9} | {:5} | {:6} | {:6} |'
 build_separator = '-' * 74
 
 # All supported boards
-all_boards = []
-for entry in os.scandir("src/boards"):
-    if entry.is_dir():
-        all_boards.append(entry.name)
+all_boards = ['dsd6_nrf52832', 'k9_nrf52832', 'nitrogen_nrf52832', 'p8_nrf52832', 'pinetime_nrf52832']
+# for entry in os.scandir("src/boards"):
+#     if entry.is_dir():
+#         all_boards.append(entry.name)
 all_boards.sort()
 
 #sha, version = build_info.get_version_info()
